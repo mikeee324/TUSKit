@@ -136,7 +136,7 @@ class TUSExecutor: NSObject, URLSessionDelegate {
         
         // Get from which point we should start the uploading (important if the file
         // has already been partially uploaded)
-        checkForResumableOffset(uploadUrl: upload.uploadLocationURL!) { (uploadOffset) in
+        checkForResumableOffset(upload: upload) { (uploadOffset) in
             // Create chunks to upload, eventually starting from the uploadOffset we retrieved
             let chunks = self.dataIntoChunks(data: uploadData,
                                              chunkSize: TUSClient.shared.chunkSize,

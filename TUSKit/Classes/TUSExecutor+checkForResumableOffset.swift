@@ -12,10 +12,11 @@ extension TUSExecutor {
     /// When we receive a 200 response the file has been previously uploaded
     /// and we need to resume the upload at the responded `ContentOffset`
     /// See https://tus.io/protocols/resumable-upload.html#core-protocol
-    func checkForResumableOffset(uploadUrl: URL, callback: @escaping ((Int?) -> Void)) {
-        var headRequest: URLRequest = URLRequest(url: uploadUrl)
+    func checkForResumableOffset(upload: TUSUpload, callback: @escaping ((Int?) -> Void)) {
+        var headRequest: URLRequest = URLRequest(url: upload.uploadLocationURL!)
         headRequest.httpMethod = "HEAD"
         headRequest.addValue(TUSConstants.TUSProtocolVersion, forHTTPHeaderField: "TUS-Resumable")
+        headRequest.addValue(upload.encodedMetadata, forHTTPHeaderField: "Upload-Metadata")
         let headTask = TUSClient.shared.tusSession.session.dataTask(with: headRequest) { (data, response, error) in
             if let httpResponse = response as? HTTPURLResponse {
                 let contentOffset = httpResponse.allHeaderFieldsUpper()["UPLOAD-OFFSET"]
