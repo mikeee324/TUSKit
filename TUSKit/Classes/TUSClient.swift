@@ -202,7 +202,7 @@ public class TUSClient: NSObject, URLSessionTaskDelegate {
             }
             
             switch upload.status {
-            case .created:
+            case .created, .uploading:
                 logger.log(forLevel: .Info, withMessage: String(format: "File %@ has been previously been created", upload.id))
                 executor.uploadInBackground(upload: upload)
             case .new:
